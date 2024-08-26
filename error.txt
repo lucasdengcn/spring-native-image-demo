@@ -1,0 +1,7 @@
+Caused by: org.graalvm.nativeimage.MissingReflectionRegistrationError:
+
+The program tried to reflectively invoke method public boolean org.flywaydb.core.internal.publishing.PublishingConfigurationExtension.isPublishResult() without it being registered for runtime reflection.
+
+Add public boolean org.flywaydb.core.internal.publishing.PublishingConfigurationExtension.isPublishResult() to the reflection metadata to solve this problem.
+
+See https://www.graalvm.org/latest/reference-manual/native-image/metadata/#reflection for help.
