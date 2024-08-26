@@ -40,6 +40,10 @@ management.metrics:
   distribution.percentiles-histogram.http.server.requests: true
   distribution.percentiles-histogram.resilience4j.circuitbreaker.calls: true
 
+spring:
+  flyway:
+    enabled: false
+
 spring.datasource:
   hikari:
     connectionTimeout: 20000
