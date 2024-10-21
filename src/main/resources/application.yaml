@@ -2,8 +2,11 @@ spring.application.name: demo-app
 
 server:
   port: ${APP_PORT:8083}
-  servlet:
-    context-path: /api
+  contextPath: /api
+#  undertow:
+#    options:
+#      server:
+#        record-request-start-time: true
 
 info:
   name: ${spring.application.name}
@@ -40,9 +43,21 @@ management.metrics:
   distribution.percentiles-histogram.http.server.requests: true
   distribution.percentiles-histogram.resilience4j.circuitbreaker.calls: true
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
 spring:
   flyway:
     enabled: false
+
+  servlet:
+    multipart:
+      enabled: true
+      location: temp/
+  mvc:
+    problemdetails:
+      enabled: true
 
 spring.datasource:
   hikari:
@@ -70,23 +85,25 @@ spring.jpa:
         events:
           log.LOG_QUERIES_SLOWER_THAN: 3
 
-#spring.kafka:
-#  bootstrap-servers: ${KAFKA_HOST:localhost:39192}
-#  properties:
-#    spring.json.trusted.packages: "*"
-#  producer:
-#    #key-serializer: org.apache.kafka.common.serialization.LongSerializer
-#    key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-#    value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-#    transaction-id-prefix: ${KAFKA_TX_ID:order-tx-}
-#  consumer:
-#    group-id: ${KAFKA_CONSUMER_GROUP_ID:order}
-#    auto-offset-reset: earliest
-#    enable-auto-commit: false
-#    key-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-#    value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-#    properties:
-#      isolation.level: read_committed
+spring.kafka:
+  bootstrap-servers: ${KAFKA_HOST:localhost:39192}
+  properties:
+    spring.json.trusted.packages: "*"
+  producer:
+    #key-serializer: org.apache.kafka.common.serialization.LongSerializer
+    key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    transaction-id-prefix: ${KAFKA_TX_ID:order-tx-}
+  consumer:
+    group-id: ${KAFKA_CONSUMER_GROUP_ID:order}
+    auto-offset-reset: earliest
+    enable-auto-commit: false
+    key-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    properties:
+      isolation.level: read_committed
+  listener:
+    ack-mode: manual_immediate
 #  streams:
 #    properties:
 #      commit.interval.ms: 0
@@ -95,10 +112,16 @@ spring.jpa:
 #      default.value.serde: org.springframework.kafka.support.serializer.JsonSerde
 #    state-dir: /tmp/kafka-streams-1
 
-#spring.data.redis:
-#  database: 0
-#  url: redis://${REDIS_URL:localhost:6379}
-#  timeout: 60000
+spring.data.redis:
+  repositories.enabled: false
+  database: 0
+  url: redis://${REDIS_URL:localhost:6379}
+  timeout: 60000
+
+spring.cache:
+  cache-names: "orders, orders2"
+  redis:
+    time-to-live: "10m"
 
 #spring.data.redis:
 #  sentinel:

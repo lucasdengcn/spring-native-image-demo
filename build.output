@@ -1,0 +1,53 @@
+------------------------------------------------------------------------------------------------------------------------
+Build resources:
+ - 26.49GB of memory (73.6% of 36.00GB system memory, determined at start)
+ - 12 thread(s) (100.0% of 12 available processor(s), determined at start)
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+Found pending operations, continuing analysis.
+[2/8] Performing analysis...  [******]                                                                  (69.0s @ 7.47GB)
+   50,538 reachable types   (93.5% of   54,025 total)
+   76,209 reachable fields  (59.2% of  128,737 total)
+  276,260 reachable methods (66.2% of  417,064 total)
+   14,861 types, 1,728 fields, and 24,565 methods registered for reflection
+       69 types,    70 fields, and    58 methods registered for JNI access
+        5 native libraries: -framework CoreServices, -framework Foundation, dl, pthread, z
+[3/8] Building universe...                                                                              (15.8s @ 8.30GB)
+[4/8] Parsing methods...      [*****]                                                                   (29.4s @ 7.20GB)
+[5/8] Inlining methods...     [***]                                                                      (4.8s @ 5.14GB)
+[6/8] Compiling methods...    [************]                                                           (149.7s @ 7.38GB)
+[7/8] Laying out methods...   [****]                                                                   (16.4s @ 10.66GB)
+[8/8] Creating image...       [****]                                                                    (14.3s @ 6.32GB)
+ 131.62MB (52.42%) for code area:   164,755 compilation units
+ 116.59MB (46.43%) for image heap:  992,570 objects and 430 resources
+   2.88MB ( 1.15%) for other data
+ 251.10MB in total
+------------------------------------------------------------------------------------------------------------------------
+Top 10 origins of code area:                                Top 10 object types in image heap:
+  18.70MB hibernate-core-6.5.2.Final.jar                      38.06MB byte[] for code metadata
+  18.35MB java.base                                           25.53MB byte[] for embedded resources
+   9.86MB kafka-clients-3.7.1.jar                             16.66MB byte[] for java.lang.String
+   9.03MB svm.jar (Native Image)                               9.86MB java.lang.Class
+   7.21MB jdk.proxy4                                           7.31MB java.lang.String
+   5.14MB tomcat-embed-core-10.1.26.jar                        3.95MB byte[] for reflection metadata
+   4.79MB spring-data-redis-3.3.2.jar                          2.31MB com.oracle.svm.core.hub.DynamicHubCompanion
+   4.46MB kotlin-reflect-1.9.24.jar                            1.65MB java.lang.reflect.Method
+   4.26MB java.xml                                             1.42MB c.o.svm.core.hub.DynamicHub$ReflectionMetadata
+   3.69MB java.desktop                                         1.13MB byte[] for general heap data
+  45.23MB for 213 more packages                                8.69MB for 9405 more object types
+                              Use '-H:+BuildReport' to create a report with more details.
+------------------------------------------------------------------------------------------------------------------------
+Security report:
+ - Binary includes Java deserialization.
+ - Use '--enable-sbom' to embed a Software Bill of Materials (SBOM) in the binary.
+------------------------------------------------------------------------------------------------------------------------
+Recommendations:
+ PGO:  Use Profile-Guided Optimizations ('--pgo') for improved throughput.
+ INIT: Adopt '--strict-image-heap' to prepare for the next GraalVM release.
+ AWT:  Use the tracing agent to collect metadata for AWT.
+ HEAP: Set max heap for improved and more predictable memory usage.
+ CPU:  Enable more CPU features with '-march=native' for improved performance.
+------------------------------------------------------------------------------------------------------------------------
+                      37.2s (12.0% of total time) in 109 GCs | Peak RSS: 10.21GB | CPU load: 6.20
+------------------------------------------------------------------------------------------------------------------------

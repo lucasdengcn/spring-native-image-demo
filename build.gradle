@@ -1,9 +1,11 @@
 plugins {
-	id 'org.jetbrains.kotlin.jvm' version '1.9.24'
-	id 'org.jetbrains.kotlin.plugin.spring' version '1.9.24'
-	id 'org.springframework.boot' version '3.3.2'
+	id 'java'
+	id 'org.jetbrains.kotlin.jvm' version '2.0.21'
+	id 'org.jetbrains.kotlin.plugin.spring' version '2.0.21'
+	id 'org.springframework.boot' version '3.3.4'
 	id 'io.spring.dependency-management' version '1.1.6'
-	id 'org.graalvm.buildtools.native' version '0.10.2'
+	id 'org.graalvm.buildtools.native' version '0.10.3'
+	id "org.jetbrains.kotlin.kapt" version "2.0.21"
 }
 
 group = 'com.example'
@@ -13,6 +15,24 @@ java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(21)
 	}
+}
+
+ext {
+	set('springCloudVersion', "2023.0.3")
+	set('lombokMapstructBindingVersion', "0.2.0")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
 }
 
 repositories {
@@ -29,6 +49,10 @@ repositories {
 	mavenCentral()
 }
 
+graalvmNative {
+	toolchainDetection = true
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
@@ -36,15 +60,41 @@ dependencies {
 	//
 	// implementation 'org.flywaydb:flyway-core:10.17.2'
 	//
+//	implementation "io.github.resilience4j:resilience4j-spring-boot3"
+//	implementation "io.github.resilience4j:resilience4j-all"
+//	implementation "io.github.resilience4j:resilience4j-kotlin"
+	//
+	implementation 'com.google.guava:guava:31.1-jre'
+	implementation "org.mapstruct:mapstruct:1.6.2"
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	//
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-undertow'
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'org.springframework.kafka:spring-kafka'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	//implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-autoconfigure-processor'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+	//
+	implementation 'io.cloudevents:cloudevents-json-jackson:4.0.1'
+	implementation 'io.cloudevents:cloudevents-spring:4.0.1'
+	implementation 'io.cloudevents:cloudevents-kafka:4.0.1'
+	//
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	kapt "org.mapstruct:mapstruct-processor:1.6.2"
 	//
 	implementation 'org.postgresql:postgresql'
 	//
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
 	testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
+	testImplementation 'net.datafaker:datafaker:2.3.1'
+	testAnnotationProcessor 'org.mapstruct:mapstruct-processor:1.6.2'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -56,4 +106,12 @@ kotlin {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+kapt {
+	showProcessorStats = true
+	keepJavacAnnotationProcessors = true
+	arguments {
+		arg("mapstruct.defaultComponentModel", "spring")
+	}
 }
