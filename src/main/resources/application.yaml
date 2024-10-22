@@ -193,6 +193,8 @@ resilience4j.circuitbreaker:
         - org.springframework.web.client.RestClientException
         - java.util.concurrent.TimeoutException
         - java.io.IOException
+        - java.net.SocketTimeoutException
+        - feign.RetryableException
         - com.example.demo.exception.APIIntegrationException
       ignoreExceptions:
         - com.example.demo.exception.RemoteResourceNotFoundException
@@ -227,8 +229,9 @@ resilience4j.retry:
         - org.springframework.web.client.RestClientException
         - java.util.concurrent.TimeoutException
         - java.io.IOException
+        - java.net.SocketTimeoutException
+        - feign.RetryableException
         - com.example.demo.exception.APIIntegrationException
-        - com.example.demo.exception.RemoteResourceNotFoundException
       ignoreExceptions:
         - com.example.demo.exception.RemoteResourceNotFoundException
   instances:

@@ -27,6 +27,24 @@
     "allDeclaredConstructors": true
   },
   {
+    "name": "feign.RetryableException",
+    "allPublicMethods": true,
+    "allPublicClasses": true,
+    "allDeclaredMethods": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "java.net.SocketTimeoutException",
+    "allPublicMethods": true,
+    "allPublicClasses": true,
+    "allDeclaredMethods": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allDeclaredConstructors": true
+  },
+  {
     "name": "com.example.demo.exception.APIIntegrationException",
     "allPublicMethods": true,
     "allPublicClasses": true,
