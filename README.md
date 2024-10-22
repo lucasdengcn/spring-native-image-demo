@@ -69,9 +69,11 @@ https://docs.spring.io/spring-cloud-openfeign/reference/spring-cloud-openfeign.h
 
 ## Build Env
 
+```shell
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/graalvm-jdk-21.0.5+9.1/Contents/Home"
 export GRAALVM_HOME=$JAVA_HOME
 export PATH=$GRAALVM_HOME/bin:$PATH
+```
 
 ### Build and Run the Demo
 
@@ -86,9 +88,9 @@ gradle clean nativeCompile
 
 #### Runtime info
 
-~250M
+Package size: ~250M
 
-Started DemoApplicationKt in 1.121 seconds (process running for 1.132)
+Duration: Started DemoApplicationKt in 1.121 seconds (process running for 1.132)
 
 #### Running the Native Image
 
