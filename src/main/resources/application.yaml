@@ -33,12 +33,14 @@ logging:
 
 management:
   endpoints.web.exposure.include: '*'
+  endpoint.metrics.enabled: true
   endpoint.health.show-details: always
   health:
     circuitbreakers.enabled: true
     ratelimiters.enabled: true
 
 management.metrics:
+  export.prometheus.enabled: true
   tags.application: ${spring.application.name}
   distribution.percentiles-histogram.http.server.requests: true
   distribution.percentiles-histogram.resilience4j.circuitbreaker.calls: true
@@ -123,6 +125,36 @@ spring.cache:
   redis:
     time-to-live: "10m"
 
+spring.cloud.openfeign:
+  micrometer.enabled: true
+  circuitbreaker:
+    enabled: true
+    alphanumeric-ids:
+      enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
+      fakePost:
+        url: https://jsonplaceholder.typicode.com
+        micrometer.enabled: true
+
+#resilience4j:
+#  circuitbreaker:
+#    instances:
+#      fakePostgetPosts:
+#        minimumNumberOfCalls: 10
+#      fakePostgetPost:
+#        minimumNumberOfCalls: 10
+#  timelimiter:
+#    instances:
+#      fakePostgetPosts:
+#        timeoutDuration: 1s
+#      fakePostgetPost:
+#        timeoutDuration: 500ms
+
 #spring.data.redis:
 #  sentinel:
 #    master: mymaster
@@ -145,111 +177,114 @@ spring.cache:
 #      - 127.0.0.1:6376
 #    maxRedirects: 2
 
-#resilience4j.circuitbreaker:
-#  configs:
-#    default:
-#      registerHealthIndicator: true
-#      slidingWindowSize: 10
-#      minimumNumberOfCalls: 5
-#      permittedNumberOfCallsInHalfOpenState: 3
-#      automaticTransitionFromOpenToHalfOpenEnabled: true
-#      waitDurationInOpenState: 5s
-#      failureRateThreshold: 50
-#      eventConsumerBufferSize: 10
-#      recordExceptions:
-#        - org.springframework.web.client.HttpServerErrorException
-#        - org.springframework.web.client.RestClientException
-#        - java.util.concurrent.TimeoutException
-#        - java.io.IOException
-#      ignoreExceptions:
-#        - com.example.demo.order.exception.BusinessException
-#    shared:
-#      slidingWindowSize: 100
-#      permittedNumberOfCallsInHalfOpenState: 30
-#      waitDurationInOpenState: 1s
-#      failureRateThreshold: 50
-#      eventConsumerBufferSize: 10
-#      ignoreExceptions:
-#        - com.example.demo.order.exception.BusinessException
-#  instances:
-#    payment:
-#      baseConfig: default
-#    backendB:
-#      registerHealthIndicator: true
-#      slidingWindowSize: 10
-#      minimumNumberOfCalls: 10
-#      permittedNumberOfCallsInHalfOpenState: 3
-#      waitDurationInOpenState: 5s
-#      failureRateThreshold: 50
-#      eventConsumerBufferSize: 10
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      registerHealthIndicator: true
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 5s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
+      recordExceptions:
+        - org.springframework.web.client.HttpServerErrorException
+        - org.springframework.web.client.RestClientException
+        - java.util.concurrent.TimeoutException
+        - java.io.IOException
+        - com.example.demo.exception.APIIntegrationException
+      ignoreExceptions:
+        - com.example.demo.exception.RemoteResourceNotFoundException
+    shared:
+      slidingWindowSize: 100
+      permittedNumberOfCallsInHalfOpenState: 30
+      waitDurationInOpenState: 1s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
+      ignoreExceptions:
+        - com.example.demo.exception.RemoteResourceNotFoundException
+  instances:
+    fakePost:
+      baseConfig: default
+    backendB:
+      registerHealthIndicator: true
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 10
+      permittedNumberOfCallsInHalfOpenState: 3
+      waitDurationInOpenState: 5s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
 #      recordFailurePredicate: com.example.demo.order.exception.RecordFailurePredicate
-#
-#resilience4j.retry:
-#  configs:
-#    default:
-#      maxAttempts: 3
-#      waitDuration: 2000
-#      retryExceptions:
-#        - org.springframework.web.client.HttpServerErrorException
-#        - org.springframework.web.client.RestClientException
-#        - java.util.concurrent.TimeoutException
-#        - java.io.IOException
-#      ignoreExceptions:
-#        - com.example.demo.order.exception.BusinessException
-#  instances:
-#    payment:
-#      baseConfig: default
-#    backendB:
-#      baseConfig: default
-#
-#resilience4j.bulkhead:
-#  configs:
-#    default:
-#      maxConcurrentCalls: 10
-#  instances:
-#    payment:
-#      maxConcurrentCalls: 5
-#    backendB:
-#      maxWaitDuration: 10ms
-#      maxConcurrentCalls: 20
-#
-#resilience4j.thread-pool-bulkhead:
-#  configs:
-#    default:
-#      maxThreadPoolSize: 4
-#      coreThreadPoolSize: 2
-#      queueCapacity: 2
-#  instances:
-#    payment:
-#      baseConfig: default
-#    backendB:
-#      maxThreadPoolSize: 1
-#      coreThreadPoolSize: 1
-#      queueCapacity: 1
-#
-#resilience4j.ratelimiter:
-#  configs:
-#    default:
-#      registerHealthIndicator: false
-#      limitForPeriod: 10
-#      limitRefreshPeriod: 1s
-#      timeoutDuration: 0
-#      eventConsumerBufferSize: 100
-#  instances:
-#    payment:
-#      baseConfig: default
-#    backendB:
-#      limitForPeriod: 6
-#      limitRefreshPeriod: 500ms
-#      timeoutDuration: 3s
-#
-#resilience4j.timelimiter:
-#  configs:
-#    default:
-#      cancelRunningFuture: false
-#      timeoutDuration: 100ms
-#  instances:
-#    payment:
-#      baseConfig: default
-#    backendB:
-#      baseConfig: default
+
+resilience4j.retry:
+  configs:
+    default:
+      maxAttempts: 3
+      waitDuration: 2000
+      retryExceptions:
+        - org.springframework.web.client.HttpServerErrorException
+        - org.springframework.web.client.RestClientException
+        - java.util.concurrent.TimeoutException
+        - java.io.IOException
+        - com.example.demo.exception.APIIntegrationException
+        - com.example.demo.exception.RemoteResourceNotFoundException
+      ignoreExceptions:
+        - com.example.demo.exception.RemoteResourceNotFoundException
+  instances:
+    fakePost:
+      baseConfig: default
+    backendB:
+      baseConfig: default
+
+resilience4j.bulkhead:
+  configs:
+    default:
+      maxConcurrentCalls: 10
+  instances:
+    fakePost:
+      maxConcurrentCalls: 5
+    backendB:
+      maxWaitDuration: 10ms
+      maxConcurrentCalls: 20
+
+resilience4j.thread-pool-bulkhead:
+  configs:
+    default:
+      maxThreadPoolSize: 4
+      coreThreadPoolSize: 2
+      queueCapacity: 2
+  instances:
+    fakePost:
+      baseConfig: default
+    backendB:
+      maxThreadPoolSize: 1
+      coreThreadPoolSize: 1
+      queueCapacity: 1
+
+resilience4j.ratelimiter:
+  configs:
+    default:
+      registerHealthIndicator: false
+      limitForPeriod: 10
+      limitRefreshPeriod: 1s
+      timeoutDuration: 0
+      eventConsumerBufferSize: 100
+  instances:
+    fakePost:
+      baseConfig: default
+    backendB:
+      limitForPeriod: 6
+      limitRefreshPeriod: 500ms
+      timeoutDuration: 3s
+
+resilience4j.timelimiter:
+  configs:
+    default:
+      cancelRunningFuture: false
+      timeoutDuration: 100ms
+  instances:
+    fakePost:
+      baseConfig: default
+    backendB:
+      baseConfig: default

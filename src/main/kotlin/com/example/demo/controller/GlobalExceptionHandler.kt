@@ -1,6 +1,10 @@
 package com.example.demo.employee.apis.handlers
 
-import com.example.demo.service.OrderService
+import com.example.demo.exception.APIIntegrationException
+import com.example.demo.exception.RemoteResourceNotFoundException
+import feign.FeignException
+import io.github.resilience4j.bulkhead.BulkheadFullException
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException
 import jakarta.persistence.EntityNotFoundException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -25,7 +29,7 @@ import java.util.function.Consumer
 class GlobalExceptionHandler {
 
     companion object {
-        val log: Logger = LoggerFactory.getLogger(OrderService::class.java)
+        val log: Logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
     }
 
     private fun buildProblemDetail(
@@ -75,6 +79,16 @@ class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected fun handleEntityNotFoundException(
+        ex: EntityNotFoundException, request: WebRequest,
+    ): ResponseEntity<ProblemDetail> {
+        log.error("Entity NotFound: {}", request, ex)
+        val errorResponse = buildProblemDetail("Not Found", ex, HttpStatus.NOT_FOUND, request)
+        return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(RemoteResourceNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected fun handleRemoteResourceNotFoundException(
         ex: EntityNotFoundException, request: WebRequest,
     ): ResponseEntity<ProblemDetail> {
         log.error("Entity NotFound: {}", request, ex)
@@ -134,5 +148,48 @@ class GlobalExceptionHandler {
         val errorResponse = buildProblemDetail("Request Input Invalid", ex, HttpStatus.BAD_REQUEST, request)
         errorResponse.detail = join
         return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(APIIntegrationException::class)
+    @ResponseStatus(HttpStatus.BAD_GATEWAY)
+    protected fun handleAPIIntegrationException(
+        ex: APIIntegrationException, request: WebRequest,
+    ): ResponseEntity<ProblemDetail> {
+        log.error("API Integration Error: ", ex)
+        val errorResponse = buildProblemDetail("API Integration Error", ex, ex.status, request)
+        errorResponse.setProperty("remoteUrl", ex.requestUrl)
+        return ResponseEntity(errorResponse, HttpStatus.BAD_GATEWAY)
+    }
+
+    @ExceptionHandler(FeignException::class)
+    @ResponseStatus(HttpStatus.BAD_GATEWAY)
+    protected fun handleFeignException(
+        ex: FeignException, request: WebRequest,
+    ): ResponseEntity<ProblemDetail> {
+        log.error("API Integration Error: ", ex)
+        val errorResponse = buildProblemDetail("API Integration Error", ex, HttpStatus.valueOf(ex.status()), request)
+        errorResponse.setProperty("remoteUrl", ex.request().url())
+        return ResponseEntity(errorResponse, HttpStatus.BAD_GATEWAY)
+    }
+
+    @ExceptionHandler(CallNotPermittedException::class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    protected fun handleCallNotPermittedException(
+        ex: CallNotPermittedException, request: WebRequest,
+    ): ResponseEntity<ProblemDetail> {
+        log.error("API Call Not Permitted on Breaker: ", ex)
+        val errorResponse = buildProblemDetail("API Call Not Permitted on Breaker", ex, HttpStatus.SERVICE_UNAVAILABLE, request)
+        errorResponse.setProperty("breaker", ex.causingCircuitBreakerName)
+        return ResponseEntity(errorResponse, HttpStatus.SERVICE_UNAVAILABLE)
+    }
+
+    @ExceptionHandler(BulkheadFullException::class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    protected fun handleBulkheadFullException(
+        ex: BulkheadFullException, request: WebRequest,
+    ): ResponseEntity<ProblemDetail> {
+        log.error("API Call Not Permitted on Breaker: ", ex)
+        val errorResponse = buildProblemDetail("API Call Not Permitted on Breaker", ex, HttpStatus.SERVICE_UNAVAILABLE, request)
+        return ResponseEntity(errorResponse, HttpStatus.SERVICE_UNAVAILABLE)
     }
 }

@@ -54,21 +54,22 @@ graalvmNative {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+	//
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
 	//
 	// implementation 'org.flywaydb:flyway-core:10.17.2'
 	//
-//	implementation "io.github.resilience4j:resilience4j-spring-boot3"
-//	implementation "io.github.resilience4j:resilience4j-all"
-//	implementation "io.github.resilience4j:resilience4j-kotlin"
+	implementation "io.github.resilience4j:resilience4j-spring-boot3"
+	implementation "io.github.resilience4j:resilience4j-all"
+	implementation "io.github.resilience4j:resilience4j-kotlin"
 	//
 	implementation 'com.google.guava:guava:31.1-jre'
 	implementation "org.mapstruct:mapstruct:1.6.2"
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	//
 	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-undertow'
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'org.springframework.kafka:spring-kafka'
@@ -80,6 +81,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-autoconfigure-processor'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+	//
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	// implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
+	//
+	implementation 'io.micrometer:micrometer-registry-prometheus'
 	//
 	implementation 'io.cloudevents:cloudevents-json-jackson:4.0.1'
 	implementation 'io.cloudevents:cloudevents-spring:4.0.1'

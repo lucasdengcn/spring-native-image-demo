@@ -1,5 +1,28 @@
 # Spring Native Image Demo
 
+## Tech Stack
+
+- JDK 21
+- Graalvm-jdk-21.0.5+9.1
+- Kotlin 1.9.x
+- Spring Boot 3.3.x
+- Spring Cloud 2023.0.3
+- Resilience4j
+- JPA
+- MapStruct
+- Undertow
+- OpenFeign
+- CloudEvents
+- Open API Specification
+- PostgreSQL
+- JUnit 5
+- DataFaker
+- Kafka
+- Redis
+- Gradle
+- Kapt
+- Gradle Native Build tools
+
 ## Capabilities to Verify
 
 | Component      | Able To Run? |
@@ -7,15 +30,16 @@
 | JPA            | Yes          |
 | Controllers    | Yes          |
 | Flyway         | No           |
-| Rest Client    |              |
+| OpenFeign      | Yes          |
 | Redis Client   | Yes          |
 | Kafka Client   | Yes          |
-| Resilience4j   |              |
+| Resilience4j   | Yes          |
 | Map Struct     | Yes          |
 | Swagger UI     | Yes          |
 | Validation     | Yes          |
 | Cacheable      | Yes          |
 | Kafka Listener | Yes          |
+
 
 ## OTEL
 
@@ -35,6 +59,13 @@ do not set default value for data class, otherwise MapStruct will not assign val
 
 https://spring.io/guides/gs/caching
 
+## OpenFeign
+
+https://docs.spring.io/spring-cloud-openfeign/reference/spring-cloud-openfeign.html#spring-cloud-feign
+
+## Resilience4j
+
+
 
 ## Build Env
 
@@ -53,19 +84,23 @@ gradle clean nativeCompile
 
 ```
 
-### Package size
+#### Runtime info
 
 ~250M
 
-## Running the Native Image
+Started DemoApplicationKt in 1.121 seconds (process running for 1.132)
+
+#### Running the Native Image
 
 ```shell
-
-cd ~./build/native/nativeCompile
-
+./build/native/nativeCompile/spring-native-image-demo
 ```
 
+#### Run Native directly
 
-  
+```shell
+gradle clean nativeRun
+```
+
 
 

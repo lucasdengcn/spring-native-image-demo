@@ -1,0 +1,47 @@
+[
+  {
+    "name": "org.springframework.web.client.HttpServerErrorException",
+    "allPublicMethods": true,
+    "allPublicClasses": true,
+    "allDeclaredMethods": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "org.springframework.web.client.RestClientException",
+    "allPublicMethods": true,
+    "allPublicClasses": true,
+    "allDeclaredMethods": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "java.util.concurrent.TimeoutException",
+    "allPublicMethods": true,
+    "allPublicClasses": true,
+    "allDeclaredMethods": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "com.example.demo.exception.APIIntegrationException",
+    "allPublicMethods": true,
+    "allPublicClasses": true,
+    "allDeclaredMethods": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "com.example.demo.exception.RemoteResourceNotFoundException",
+    "allPublicMethods": true,
+    "allPublicClasses": true,
+    "allDeclaredMethods": true,
+    "allDeclaredClasses": true,
+    "allPublicConstructors": true,
+    "allDeclaredConstructors": true
+  }
+]
