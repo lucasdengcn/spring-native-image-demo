@@ -8,7 +8,8 @@
 - Spring Boot 3.3.x
 - Spring Cloud 2023.0.3
 - Resilience4j
-- JPA
+- Hibernate
+- Spring Data JPA
 - MapStruct
 - Undertow
 - OpenFeign
@@ -22,6 +23,7 @@
 - Gradle
 - Kapt
 - Gradle Native Build tools
+- RFC-9457 
 
 ## Capabilities to Verify
 

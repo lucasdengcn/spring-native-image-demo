@@ -89,9 +89,9 @@ class GlobalExceptionHandler {
     @ExceptionHandler(RemoteResourceNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected fun handleRemoteResourceNotFoundException(
-        ex: EntityNotFoundException, request: WebRequest,
+        ex: RemoteResourceNotFoundException, request: WebRequest,
     ): ResponseEntity<ProblemDetail> {
-        log.error("Entity NotFound: {}", request, ex)
+        log.error("Remote Resource NotFound: {}", request, ex)
         val errorResponse = buildProblemDetail("Not Found", ex, HttpStatus.NOT_FOUND, request)
         return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
     }
